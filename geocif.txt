@@ -1,0 +1,213 @@
+[AGMET]
+eo_plot = ['ndvi', 'cpc_tmax', 'cpc_tmin', 'chirps', 'esi_4wk', 'soil_moisture_as1', 'soil_moisture_as2']
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; COUNTRIES
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[afghanistan]
+crops = ['maize']  ; , 'spring_wheat', 'winter_wheat']
+
+[angola]
+crops = ['maize']
+boundary_file = adm_shapefile.shp
+
+[argentina]
+crops = ['soybean', 'winter_wheat', 'maize']
+
+[brazil]
+crops = ['soybean', 'winter_wheat', 'rice', 'maize']
+
+[dem_people's_rep_of_korea]
+crops = ['maize']
+
+[india]
+crops = ['soybean', 'maize', 'rice']
+
+[illinois]
+crops = ['maize']
+admin_zone = admin_3
+boundary_file = illinois_counties.shp
+
+[lesotho]
+boundary_file = adm_shapefile.shp
+
+[madagascar]
+crops = ['maize']
+admin_zone = admin_2
+boundary_file = adm_shapefile.shp
+
+[malawi]
+crops = ['maize']
+admin_zone = admin_2
+boundary_file = adm_shapefile.shp
+
+[mozambique]
+crops = ['maize']
+boundary_file = adm_shapefile.shp
+
+[namibia]
+crops = ['sorghum']
+
+[nepal]
+crops = ['rice']
+boundary_file = hermes_NPL_new_wgs_1.shp
+admin_col_name = PR_NAME
+
+[south_africa]
+crops = ['maize']
+boundary_file = adm_shapefile.shp
+
+[ethiopia]
+admin_zone = admin_1
+crops = ['maize']
+
+[ghana]
+admin_zone = admin_1
+crops = ['maize']
+boundary_file = EWCM_Level_1.shp
+
+[kenya]
+
+[russian_federation]
+crops = ['maize', 'winter_wheat']  ; , ]
+
+[united_states_of_america]
+crops = ['rice', 'maize', 'winter_wheat']
+
+[ukraine]
+crops = ['maize', 'winter_wheat'] ; ['soybean', 'winter_wheat', 'maize']
+
+[united_republic_of_tanzania]
+boundary_file = adm_shapefile.shp
+
+[zambia]
+crops = ['maize']
+admin_zone = admin_1
+; boundary_file = adm_shapefile.shp
+
+[zimbabwe]
+boundary_file = adm_shapefile.shp
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ML
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[linear]
+ml_model = True
+
+[gam]
+ml_model = True
+
+[analog]
+ML_model = False
+
+[median]
+ML_model = False
+
+[catboost]
+ML_model = True
+
+[ngboost]
+ML_model = True
+
+[cumulative_1]
+select_cei_by = Index
+use_ceis = ["MAX_NDVI"]
+ML_model = True
+
+[cumulative_2]
+select_cei_by = Index
+use_ceis = ["AUC_ESI4WK", "MAX_NDVI"]
+ML_model = True
+
+[cumulative_3]
+select_cei_by = Index
+use_ceis = ["AUC_NDVI", "PRCPTOT", "AUC_ESI4WK"]
+ML_model = True
+
+[oblique]
+ML_model = True
+
+[merf]
+ML_model = True
+
+[cubist]
+ML_model = True
+
+[ydf]
+ML_model = True
+
+[LOGGING]
+log_level = INFO  ; DEBUG, INFO, WARNING, ERROR
+
+[ML]
+model_type = REGRESSION  ; REGRESSION
+classify_target = False
+number_classes = 3
+target = Yield (tn per ha)
+rename_target = False
+new_name_target = Yield
+do_xai = True
+estimate_ci = False
+estimate_ci_for_all = False
+alpha = 0.3
+panel_model = True
+panel_model_region = Country ; Region
+lag_years = 5
+median_years = 5
+use_single_time_period_as_feature = False
+lag_yield_as_feature = False
+median_yield_as_feature = False
+median_area_as_feature = False
+analogous_year_yield_as_feature = False
+include_lat_lon_as_feature = False
+last_year_yield_as_feature = False
+use_outlook_as_feature = False
+correlation_threshold = 0.2
+spatial_autocorrelation = False
+sa_method = moran_eigenvactor_map
+fraction_simulate = 100  ; percentage of the season to simulate (0-100)
+cat_features = ["Harvest Year", "Region_ID", "Region"]
+cluster_strategy = auto_detect  ; can be individual, single, auto_detect
+loocv_var = Harvest Year
+feature_selection = BorutaPy ; Leshy  ; BorutaShap ; BorutaPy mrmr
+check_yield_trend = False
+run_latest_time_period = True
+run_every_time_period = 3
+
+[REGRESSION]
+
+[CLASSIFICATION]
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[DEFAULT]
+project_name = geocif
+select_cei_by = Type
+use_ceis = ['all'] ; 'Cold', 'Heat', 'Rain', 'Temperature', 'Compound', 'VI', 'ESI', 'h-Index'
+experiment_name = default
+method = monthly_r
+optimize = False
+do_parallel = False
+update_input_file = True
+correlation_plots = True
+plot_map_for_correlation_plot = True
+national_correlation = False
+correlation_plot_groupby = Region_ID
+run_feature_selection =  True
+run_ml = True
+use_cumulative_features = False
+db = nepal_nov21.db ; malawi_may_15_2024.db
+countries = ["nepal"]
+; ["mozambique", "lesotho", "united_republic_of_tanzania", "south_africa", "angola"]  
+; ["ukraine", "united_states_of_america", "south_africa", "malawi"]
+; "zambia", "Zimbabwe", "mozambique", "lesotho", "russian_federation", 
+crops = ['rice']
+admin_zone = admin_1
+models = ['catboost']  ; analog, best, median, last_year
+boundary_file = Level_1.shp
+fraction_loocv = 0.3
+forecast_seasons = [2024, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002]
+admin_col_name = ADM1_NAME
+run_model_at_peak = False
+
+[outlook]
+pickle_file = 011961-2020_Maize_yld_veg_24leads_1961-2020_quant0.33_CMIP6pslAnalogs_ensoLagTrgYr_50pctArea_50kgFlag.pkl
